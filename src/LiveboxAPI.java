@@ -27,9 +27,6 @@ public enum LiveboxAPI {
     private String getBaseUrl(){
         return "http://" + DOMAIN + "/API/";
     }
-    private String getAdminBaseUrl() throws Exception{
-        return "http://" + PasswordGenerator.GenerateAuth(MAC) + "@" + DOMAIN + "/API/";
-    }
     
     public void setMAC(String m){
         MAC = m;
@@ -41,33 +38,35 @@ public enum LiveboxAPI {
         DOMAIN = d;
     }
     
-    public JSONObject getWAN() throws UnirestException{
+    public JSONObject getWAN() throws UnirestException, Exception{
         String url = INSTANCE.getBaseUrl() + "WAN";
         
         JSONObject result = Unirest.get(url).basicAuth("ApiUsr", "ApiUsrPass").asJson().getBody().getObject();
         INSTANCE.MAC = result.getString("MACAddress");
         
+        System.out.println(PasswordGenerator.GenerateAuth(INSTANCE.MAC));
+        
         return result;
     }
     
     public static JSONArray getLines() throws UnirestException, Exception{
-        String url = INSTANCE.getAdminBaseUrl() + "VoIP/SIP/Lines";
+        String url = INSTANCE.getBaseUrl() + "VoIP/SIP/Lines";
         
-        JSONArray result = Unirest.get(url).basicAuth("UsrAdmin", PasswordGenerator.encrypt(INSTANCE.MAC)).asJson().getBody().getArray();
+        JSONArray result = Unirest.get(url).header("Authorization", "Basic "+ PasswordGenerator.GenerateBasicAuth(INSTANCE.MAC)).asJson().getBody().getArray();
         return result;
     } 
     
     public static JSONObject getLine(String lineName) throws UnirestException, Exception{
-        String url = INSTANCE.getAdminBaseUrl() + "VoIP/SIP/Lines/{line}";
+        String url = INSTANCE.getBaseUrl() + "VoIP/SIP/Lines/{line}";
         
-        JSONObject result = Unirest.get(url).routeParam("line", lineName).basicAuth("UsrAdmin", PasswordGenerator.encrypt(INSTANCE.MAC)).asJson().getBody().getObject();
+        JSONObject result = Unirest.get(url).routeParam("line", lineName).header("Authorization", "Basic "+ PasswordGenerator.GenerateBasicAuth(INSTANCE.MAC)).asJson().getBody().getObject();
         return result;
     } 
     
     public static JSONObject getSIP() throws UnirestException, Exception{
-        String url = INSTANCE.getAdminBaseUrl() + "VoIP/SIP";
+        String url = INSTANCE.getBaseUrl() + "VoIP/SIP";
         
-        JSONObject result = Unirest.get(url).basicAuth("UsrAdmin", PasswordGenerator.encrypt(INSTANCE.MAC)).asJson().getBody().getObject();
+        JSONObject result = Unirest.get(url).header("Authorization", "Basic "+ PasswordGenerator.GenerateBasicAuth(INSTANCE.MAC)).asJson().getBody().getObject();
         return result;
     } 
     

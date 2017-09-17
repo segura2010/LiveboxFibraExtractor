@@ -1,4 +1,5 @@
 
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.net.URI;
 import org.json.JSONArray;
@@ -95,20 +96,23 @@ public class GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         try{
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            resultTxt.setEnabled(false);
+            
             LiveboxAPI.INSTANCE.setDOMAIN(routerIPTxt.getText());
             LiveboxAPI.INSTANCE.getWAN();
             StringBuilder res = new StringBuilder();
-            res.append("\nRouter MAC: "+LiveboxAPI.INSTANCE.getMAC());
+            res.append("\nRouter MAC: "+ LiveboxAPI.INSTANCE.getMAC());
 
             JSONArray lines = LiveboxAPI.getLines();
-            //System.out.println(lines.toString());
+            System.out.println(lines.toString());
             for(int i=0;i<lines.length();i++){
                 JSONObject l = lines.getJSONObject(i);
                 //System.out.println(l.getString("name"));
                 if(l.getString("status").equals("Up"))
                 {
                     JSONObject lineInfo = LiveboxAPI.getLine(l.getString("name"));
-                    //System.out.println(lineInfo.toString());
+                    System.out.println(lineInfo.toString());
 
                     res.append("\nuserId: "+ lineInfo.getString("name"));
                     res.append("\nauthPassword: "+ lineInfo.getString("authPassword"));
@@ -122,7 +126,15 @@ public class GUI extends javax.swing.JFrame {
             res.append("\noutboundProxyServerPort: "+ sip.getInt("outboundProxyServerPort"));
             
             resultTxt.setText(res.toString());
-        }catch(Exception e){ e.printStackTrace(); }
+            resultTxt.setEnabled(true);
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }catch(Exception e){ 
+            e.printStackTrace();
+            
+            resultTxt.setText(e.getMessage());
+            resultTxt.setEnabled(true);
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
         
     }//GEN-LAST:event_getSIPInfoBtnMouseClicked
 
