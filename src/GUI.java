@@ -2,6 +2,8 @@
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.net.URI;
+import javax.swing.JOptionPane;
+import javax.swing.plaf.OptionPaneUI;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -37,8 +39,13 @@ public class GUI extends javax.swing.JFrame {
         getSIPInfoBtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         resultTxt = new javax.swing.JTextArea();
+        passwordTxt = new javax.swing.JTextField();
+        newPasswordTxt = new javax.swing.JTextField();
+        newPasswordBtn = new javax.swing.JButton();
+        getDefaultPasswordBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(400, 400));
 
         routerIPTxt.setText("192.168.1.1");
         routerIPTxt.addActionListener(new java.awt.event.ActionListener() {
@@ -56,7 +63,36 @@ public class GUI extends javax.swing.JFrame {
 
         resultTxt.setColumns(20);
         resultTxt.setRows(5);
+        resultTxt.setText("INSTRUCTIONS - README!\n\n1. Get Default Password\n2. Get SIP Info\n\nFor security, we recommend to change the default password.\nTo do that, set the new password in the input field and click\n\"Set New Password\".\n\nAfter you set new password, the device will reboot automatically.\nIf you already changed your password, put it in the \"Password\" field\nand click \"Get SIP Info\". (You do not have to get the default password)");
         jScrollPane1.setViewportView(resultTxt);
+
+        passwordTxt.setText("Password");
+        passwordTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passwordTxtActionPerformed(evt);
+            }
+        });
+
+        newPasswordTxt.setText("New Password");
+        newPasswordTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newPasswordTxtActionPerformed(evt);
+            }
+        });
+
+        newPasswordBtn.setText("Set New Password");
+        newPasswordBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                newPasswordBtnMouseClicked(evt);
+            }
+        });
+
+        getDefaultPasswordBtn.setText("Get Default Password");
+        getDefaultPasswordBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                getDefaultPasswordBtnMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,23 +101,40 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(routerIPTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(passwordTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(newPasswordBtn))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(routerIPTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(newPasswordTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(getDefaultPasswordBtn)
                             .addComponent(getSIPInfoBtn))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))
+                        .addGap(0, 16, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(routerIPTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(routerIPTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(newPasswordTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(passwordTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(newPasswordBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(getDefaultPasswordBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(getSIPInfoBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -99,8 +152,10 @@ public class GUI extends javax.swing.JFrame {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             resultTxt.setEnabled(false);
             
+            LiveboxAPI.INSTANCE.setAdminPassword(passwordTxt.getText());
+            
             LiveboxAPI.INSTANCE.setDOMAIN(routerIPTxt.getText());
-            LiveboxAPI.INSTANCE.getWAN();
+            
             StringBuilder res = new StringBuilder();
             res.append("\nRouter MAC: "+ LiveboxAPI.INSTANCE.getMAC());
 
@@ -137,6 +192,67 @@ public class GUI extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_getSIPInfoBtnMouseClicked
+
+    private void passwordTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passwordTxtActionPerformed
+
+    private void newPasswordTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newPasswordTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_newPasswordTxtActionPerformed
+
+    private void getDefaultPasswordBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getDefaultPasswordBtnMouseClicked
+        // TODO add your handling code here:
+        try{
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            resultTxt.setEnabled(false);
+            
+            LiveboxAPI.INSTANCE.setDOMAIN(routerIPTxt.getText());
+            LiveboxAPI.INSTANCE.getWAN();
+            passwordTxt.setText(LiveboxAPI.INSTANCE.getAdminPassword());
+            
+            resultTxt.setEnabled(true);
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }catch(Exception e){ 
+            e.printStackTrace();
+            
+            resultTxt.setText(e.getMessage());
+            resultTxt.setEnabled(true);
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
+    }//GEN-LAST:event_getDefaultPasswordBtnMouseClicked
+
+    private void newPasswordBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_newPasswordBtnMouseClicked
+        // TODO add your handling code here:
+        try{
+            int dialogResult = JOptionPane.showConfirmDialog(rootPane, "Are you sure you want to change your password?");
+            if(dialogResult != JOptionPane.YES_OPTION){
+                return;
+            }
+            
+            
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            resultTxt.setEnabled(false);
+            
+            LiveboxAPI.INSTANCE.setDOMAIN(routerIPTxt.getText());
+            LiveboxAPI.INSTANCE.setAdminPassword(passwordTxt.getText());
+            
+            LiveboxAPI.setUsrAdminPassword(newPasswordTxt.getText());
+            LiveboxAPI.setOspPassword(newPasswordTxt.getText());
+            
+            LiveboxAPI.rebootRouter();
+            
+            resultTxt.setText("Password Set!\nRebooting..");
+            resultTxt.setEnabled(true);
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }catch(Exception e){ 
+            e.printStackTrace();
+            
+            resultTxt.setText(e.getMessage());
+            resultTxt.setEnabled(true);
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        }
+    }//GEN-LAST:event_newPasswordBtnMouseClicked
 
     
     /**
@@ -175,8 +291,12 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton getDefaultPasswordBtn;
     private javax.swing.JButton getSIPInfoBtn;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton newPasswordBtn;
+    private javax.swing.JTextField newPasswordTxt;
+    private javax.swing.JTextField passwordTxt;
     private javax.swing.JTextArea resultTxt;
     private javax.swing.JTextField routerIPTxt;
     // End of variables declaration//GEN-END:variables
