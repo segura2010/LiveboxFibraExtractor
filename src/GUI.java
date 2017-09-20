@@ -63,7 +63,7 @@ public class GUI extends javax.swing.JFrame {
 
         resultTxt.setColumns(20);
         resultTxt.setRows(5);
-        resultTxt.setText("INSTRUCTIONS - README!\n\n1. Get Default Password\n2. Get SIP Info\n\nFor security, we recommend to change the default password.\nTo do that, set the new password in the input field and click\n\"Set New Password\".\n\nAfter you set new password, the device will reboot automatically.\nIf you already changed your password, put it in the \"Password\" field\nand click \"Get SIP Info\". (You do not have to get the default password)");
+        resultTxt.setText("INSTRUCTIONS - README!\n\n1. Get Default Password\n2. Get SIP Info\n\nFor security, we recommend to change the default password.\nTo do that, set the new password in the input field and click\n\"Set New Password\".\n\nIMPORTANT: New firmware updates will be installed in your router, \nthose new updates WILL CHANGE your password to the default password.\n\nAfter you set new password, the device will reboot automatically.\nIf you already changed your password, put it in the \"Password\" field\nand click \"Get SIP Info\". (You do not have to get the default password)");
         jScrollPane1.setViewportView(resultTxt);
 
         passwordTxt.setText("Password");

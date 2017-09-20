@@ -106,7 +106,7 @@
           <Properties>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
-            <Property name="text" type="java.lang.String" value="INSTRUCTIONS - README!&#xa;&#xa;1. Get Default Password&#xa;2. Get SIP Info&#xa;&#xa;For security, we recommend to change the default password.&#xa;To do that, set the new password in the input field and click&#xa;&quot;Set New Password&quot;.&#xa;&#xa;After you set new password, the device will reboot automatically.&#xa;If you already changed your password, put it in the &quot;Password&quot; field&#xa;and click &quot;Get SIP Info&quot;. (You do not have to get the default password)"/>
+            <Property name="text" type="java.lang.String" value="INSTRUCTIONS - README!&#xa;&#xa;1. Get Default Password&#xa;2. Get SIP Info&#xa;&#xa;For security, we recommend to change the default password.&#xa;To do that, set the new password in the input field and click&#xa;&quot;Set New Password&quot;.&#xa;&#xa;IMPORTANT: New firmware updates will be installed in your router, &#xa;those new updates WILL CHANGE your password to the default password.&#xa;&#xa;After you set new password, the device will reboot automatically.&#xa;If you already changed your password, put it in the &quot;Password&quot; field&#xa;and click &quot;Get SIP Info&quot;. (You do not have to get the default password)"/>
           </Properties>
         </Component>
       </SubComponents>
