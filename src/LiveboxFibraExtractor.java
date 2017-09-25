@@ -5,15 +5,8 @@
  */
 
 import com.mashape.unirest.http.exceptions.UnirestException;
-import java.security.MessageDigest;
-import java.util.Arrays;
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import sun.security.krb5.internal.crypto.Aes128;
 
 /**
  *
@@ -28,9 +21,11 @@ public class LiveboxFibraExtractor {
         // TODO code application logic here
         
         try{
-            //System.out.println(PasswordGenerator.GenerateAuth("48:8D:36:31:63:FF"));
-            
-            //try{ getAllSIPData(); } catch(Exception e){ e.printStackTrace(); }
+            if(args.length >= 1){
+                // Users can pass the MAC address from command line in order to
+                // generate the default password for testintg purposes
+                System.out.println(PasswordGenerator.GenerateAuth(args[0]));
+            }
             
             GUI gui = new GUI();
             gui.setVisible(true);

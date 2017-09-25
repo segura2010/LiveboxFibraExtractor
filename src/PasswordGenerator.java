@@ -1,5 +1,6 @@
 
 import java.security.MessageDigest;
+import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -27,16 +28,6 @@ public enum PasswordGenerator {
             key[i] = hash[i % hash.length];
         }
         
-        /*
-        System.out.println("KEY: " + key);
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < key.length; ++i) {
-            sb.append(Integer.toHexString((key[i] & 0xFF) | 0x100).substring(1,3));
-        }
-        System.out.println("KEY: " + sb);
-        */
-        
-        
         final SecretKey sKey = new SecretKeySpec(key, "DESede");
         final Cipher cipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, sKey);
@@ -44,7 +35,7 @@ public enum PasswordGenerator {
         final byte[] plainTextBytes = (PasswordGenerator.MacFormat(mac)).getBytes("utf-8");
         
         final byte[] cipherText = cipher.doFinal(plainTextBytes);
-        final String encodedCipherText = new sun.misc.BASE64Encoder().encode(cipherText);
+        final String encodedCipherText = Base64.getEncoder().encodeToString(cipherText);
         
         return encodedCipherText;
     }
@@ -63,7 +54,7 @@ public enum PasswordGenerator {
     
     public static String GenerateBasicAuth(String mac) throws Exception{
         String auth = PasswordGenerator.GenerateAuth(mac);
-        auth = new sun.misc.BASE64Encoder().encode(auth.getBytes());
+        auth = Base64.getEncoder().encodeToString(auth.getBytes());
         
         return auth;
     }
